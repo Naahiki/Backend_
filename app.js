@@ -49,11 +49,36 @@ const db = mysql.createConnection(process.env.MYSQL_URL);
 // Conectar a MySQL
 db.connect((err) => {
   if (err) {
-    console.error('Error connecting to MySQL:', err);
-  } else {
-    console.log('Connected to MySQL');
+    console.error('Error al conectar a MySQL:', err);
+    return;
+  }
+  console.log('Conectado a MySQL');
+  
+  // Solo importar la base de datos si se especifica en las variables de entorno
+  if (process.env.RUN_IMPORT === 'true') {
+    console.log("Ejecutando la importación de la base de datos...");
+    
+    const sqlFiles = [
+      './db/travel_ecommerce_users.sql',
+      './db/travel_ecommerce_orders.sql',
+      './db/travel_ecommerce_order_items.sql',
+      './db/travel_ecommerce_travel_packs.sql'
+    ];
+
+    sqlFiles.forEach((file) => {
+      console.log(`Ejecutando el archivo SQL: ${file}`);
+      const sql = fs.readFileSync(file).toString();
+      db.query(sql, (err, result) => {
+        if (err) {
+          console.error(`Error ejecutando el archivo ${file}:`, err);
+          return;
+        }
+        console.log(`Archivo ${file} ejecutado con éxito.`);
+      });
+    });
   }
 });
+
 
 // Ruta de ejemplo
 app.get('/', (req, res) => {
