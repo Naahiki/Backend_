@@ -1,19 +1,20 @@
 -- Eliminar la tabla `travel_packs` si ya existe
-DROP TABLE IF EXISTS `travel_packs`;
+DROP TABLE IF EXISTS travel_packs;
 
 -- Crear la tabla `travel_packs`
 CREATE TABLE travel_packs (
-  `pack_id` int NOT NULL,
-  `pack_title` varchar(225) NOT NULL,
-  `pack_destination` varchar(225) NOT NULL,
-  `pack_category` varchar(45) NOT NULL,
-  `pack_price` decimal(10,2) NOT NULL,
-  `pack_date` varchar(225) NOT NULL,
-  `pack_image` varchar(225) NOT NULL,
-  `pack_amount` int NOT NULL,
-  PRIMARY KEY (`pack_id`),
-  UNIQUE KEY `pack_id_UNIQUE` (`pack_id`)
+  pack_id INT NOT NULL,
+  pack_title VARCHAR(225) NOT NULL,
+  pack_destination VARCHAR(225) NOT NULL,
+  pack_category VARCHAR(45) NOT NULL,
+  pack_price DECIMAL(10,2) NOT NULL,
+  pack_date VARCHAR(225) NOT NULL,
+  pack_image VARCHAR(225) NOT NULL,
+  pack_amount INT NOT NULL,
+  PRIMARY KEY (pack_id),
+  UNIQUE (pack_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 -- Insertar datos en la tabla `travel_packs`
 INSERT INTO `travel_packs` VALUES 
