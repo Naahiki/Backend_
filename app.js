@@ -47,6 +47,28 @@ app.use(bodyParser.json());
 // Configurar conexión a la base de datos MySQL usando MYSQL_URL
 const db = mysql.createConnection(process.env.MYSQL_URL);
 
+// Función para ejecutar las migraciones secuencialmente
+const runMigration = (files, index = 0) => {
+  if (index >= files.length) {
+    console.log("Migración completada");
+    db.end(); // Cerrar la conexión después de ejecutar todas las migraciones
+    return;
+  }
+
+  const file = files[index];
+  console.log(`Ejecutando el archivo SQL: ${file}`);
+  const sql = fs.readFileSync(file).toString();
+  
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error(`Error ejecutando el archivo ${file}:`, err.sqlMessage);
+      return;
+    }
+    console.log(`Archivo ${file} ejecutado con éxito.`);
+    runMigration(files, index + 1); // Ejecutar el siguiente archivo
+  });
+};
+
 // Conectar a MySQL
 db.connect((err) => {
   if (err) {
@@ -54,11 +76,11 @@ db.connect((err) => {
     return;
   }
   console.log('Conectado a MySQL');
-  
+
   // Solo importar la base de datos si se especifica en las variables de entorno
   if (process.env.RUN_IMPORT === 'true') {
     console.log("Ejecutando la importación de la base de datos...");
-    
+
     const sqlFiles = [
       './db/travel_ecommerce_users.sql',
       './db/travel_ecommerce_orders.sql',
@@ -66,17 +88,7 @@ db.connect((err) => {
       './db/travel_ecommerce_travel_packs.sql'
     ];
 
-    sqlFiles.forEach((file) => {
-      console.log(`Ejecutando el archivo SQL: ${file}`);
-      const sql = fs.readFileSync(file).toString();
-      db.query(sql, (err, result) => {
-        if (err) {
-          console.error(`Error ejecutando el archivo ${file}:`, err);
-          return;
-        }
-        console.log(`Archivo ${file} ejecutado con éxito.`);
-      });
-    });
+    runMigration(sqlFiles); // Ejecutar los archivos de SQL de manera secuencial
   }
 });
 
