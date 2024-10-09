@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000;
 // Middleware
 
 const corsOptions = {
-  origin: ["https://puertos-dev-3000.datavaluemanagement.sarenet.es", "http://localhost:3000"], // Permitir tanto local como dominio de producción
+  origin: ["https://frontend-production-2491.up.railway.app", "http://localhost:3000"], // Permitir tanto local como dominio de producción
   credentials: true,
   methods: ['GET', 'POST', 'OPTIONS', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -83,9 +83,9 @@ db.connect((err) => {
 
     const sqlFiles = [
       './db/travel_ecommerce_users.sql',
+      './db/travel_ecommerce_travel_packs.sql',
       './db/travel_ecommerce_orders.sql',
       './db/travel_ecommerce_order_items.sql',
-      './db/travel_ecommerce_travel_packs.sql'
     ];
 
     runMigration(sqlFiles); // Ejecutar los archivos de SQL de manera secuencial

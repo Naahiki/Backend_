@@ -10,5 +10,5 @@ CREATE TABLE users (
   user_password VARCHAR(225) NOT NULL,
   user_status TINYINT(1) DEFAULT '0',
   PRIMARY KEY (id_users),
-  UNIQUE (user_email)
+  UNIQUE KEY (user_email) 
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
