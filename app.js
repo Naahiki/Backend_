@@ -26,14 +26,25 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Configurar conexión a la base de datos MySQL
-const db = mysql.createConnection({
-  host: process.env.MYSQLHOST,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  port: process.env.MYSQLPORT, // Usar el puerto proporcionado por Railway
-  decimalNumbers: true,
-});
+// const db = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME,
+//   decimalNumbers: true,
+// });
+
+// // Conectar a MySQL
+// db.connect((err) => {
+//   if (err) {
+//     console.error('Error connecting to MySQL:', err);
+//   } else {
+//     console.log('Connected to MySQL');
+//   }
+// });
+
+// Configurar conexión a la base de datos MySQL usando MYSQL_URL
+const db = mysql.createConnection(process.env.MYSQL_URL);
 
 // Conectar a MySQL
 db.connect((err) => {
