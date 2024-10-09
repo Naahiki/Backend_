@@ -4,8 +4,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
+
 
 // Inicializar dotenv para usar variables de entorno desde el archivo .env
 dotenv.config();
@@ -47,28 +46,6 @@ app.use(bodyParser.json());
 // Configurar conexión a la base de datos MySQL usando MYSQL_URL
 const db = mysql.createConnection(process.env.MYSQL_URL);
 
-// Función para ejecutar las migraciones secuencialmente
-const runMigration = (files, index = 0) => {
-  if (index >= files.length) {
-    console.log("Migración completada");
-    db.end(); // Cerrar la conexión después de ejecutar todas las migraciones
-    return;
-  }
-
-  const file = files[index];
-  console.log(`Ejecutando el archivo SQL: ${file}`);
-  const sql = fs.readFileSync(file).toString();
-  
-  db.query(sql, (err, result) => {
-    if (err) {
-      console.error(`Error ejecutando el archivo ${file}:`, err.sqlMessage);
-      return;
-    }
-    console.log(`Archivo ${file} ejecutado con éxito.`);
-    runMigration(files, index + 1); // Ejecutar el siguiente archivo
-  });
-};
-
 // Conectar a MySQL
 db.connect((err) => {
   if (err) {
@@ -77,21 +54,55 @@ db.connect((err) => {
   }
   console.log('Conectado a MySQL');
 
-  // Solo importar la base de datos si se especifica en las variables de entorno
-  if (process.env.RUN_IMPORT === 'true') {
-    console.log("Ejecutando la importación de la base de datos...");
+  // Aquí ejecutas las consultas directamente
+  const createUsersTableQuery = `
+    DROP TABLE IF EXISTS users;
+    CREATE TABLE users (
+      id_users INT NOT NULL,
+      user_first_name VARCHAR(45) NOT NULL,
+      user_email VARCHAR(225) NOT NULL,
+      user_last_name VARCHAR(45) NOT NULL,
+      user_password VARCHAR(225) NOT NULL,
+      user_status TINYINT(1) DEFAULT '0',
+      PRIMARY KEY (id_users),
+      UNIQUE KEY (user_email)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `;
 
-    const sqlFiles = [
-      './db/travel_ecommerce_users.sql',
-      './db/travel_ecommerce_travel_packs.sql',
-      './db/travel_ecommerce_orders.sql',
-      './db/travel_ecommerce_order_items.sql',
-    ];
+  const createOrdersTableQuery = `
+    DROP TABLE IF EXISTS orders;
+    CREATE TABLE orders (
+      order_id INT NOT NULL AUTO_INCREMENT,
+      id_users INT DEFAULT NULL,
+      address VARCHAR(255) DEFAULT NULL,
+      city VARCHAR(100) DEFAULT NULL,
+      postal_code VARCHAR(10) DEFAULT NULL,
+      payment_method VARCHAR(50) NOT NULL,
+      status TINYINT(1) DEFAULT NULL,
+      order_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (order_id),
+      KEY id_users (id_users),
+      CONSTRAINT orders_ibfk_1 FOREIGN KEY (id_users) REFERENCES users (id_users)
+    ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `;
 
-    runMigration(sqlFiles); // Ejecutar los archivos de SQL de manera secuencial
-  }
+  // Ejecutar las consultas en serie
+  db.query(createUsersTableQuery, (err, result) => {
+    if (err) {
+      console.error('Error creando la tabla users:', err);
+    } else {
+      console.log('Tabla users creada con éxito.');
+      // Ejecuta la siguiente consulta
+      db.query(createOrdersTableQuery, (err, result) => {
+        if (err) {
+          console.error('Error creando la tabla orders:', err);
+        } else {
+          console.log('Tabla orders creada con éxito.');
+        }
+      });
+    }
+  });
 });
-
 
 // Ruta de ejemplo
 app.get('/', (req, res) => {
