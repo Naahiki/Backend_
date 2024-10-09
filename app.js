@@ -60,8 +60,19 @@ db.connect((err) => {
 
     // Definición de las consultas
     const queries = [
-      // Consultas para la tabla `users`
+      // Eliminar la tabla `order_items` si ya existe
+      `DROP TABLE IF EXISTS order_items;`,
+      
+      // Eliminar la tabla `orders` si ya existe
+      `DROP TABLE IF EXISTS orders;`,
+      
+      // Eliminar la tabla `travel_packs` si ya existe
+      `DROP TABLE IF EXISTS travel_packs;`,
+      
+      // Eliminar la tabla `users` si ya existe
       `DROP TABLE IF EXISTS users;`,
+
+      // Crear la tabla `users`
       `CREATE TABLE users (
         id_users INT NOT NULL AUTO_INCREMENT,
         user_first_name VARCHAR(45) NOT NULL,
@@ -73,23 +84,21 @@ db.connect((err) => {
         UNIQUE KEY (user_email)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
 
-      // Consultas para la tabla `travel_packs`
-      `DROP TABLE IF EXISTS \`travel_packs\`;`,
-      `CREATE TABLE \`travel_packs\` (
-        \`pack_id\` INT NOT NULL,
-        \`pack_title\` VARCHAR(225) NOT NULL,
-        \`pack_destination\` VARCHAR(225) NOT NULL,
-        \`pack_category\` VARCHAR(45) NOT NULL,
-        \`pack_price\` DECIMAL(10,2) NOT NULL,
-        \`pack_date\` VARCHAR(225) NOT NULL,
-        \`pack_image\` VARCHAR(225) NOT NULL,
-        \`pack_amount\` INT NOT NULL,
-        PRIMARY KEY (\`pack_id\`),
-        UNIQUE KEY (\`pack_id\`)
+      // Crear la tabla `travel_packs`
+      `CREATE TABLE travel_packs (
+        pack_id INT NOT NULL AUTO_INCREMENT,
+        pack_title VARCHAR(225) NOT NULL,
+        pack_destination VARCHAR(225) NOT NULL,
+        pack_category VARCHAR(45) NOT NULL,
+        pack_price DECIMAL(10,2) NOT NULL,
+        pack_date VARCHAR(225) NOT NULL,
+        pack_image VARCHAR(225) NOT NULL,
+        pack_amount INT NOT NULL,
+        PRIMARY KEY (pack_id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
 
       // Insertar datos en la tabla `travel_packs`
-      `INSERT INTO \`travel_packs\` (\`pack_id\`, \`pack_title\`, \`pack_destination\`, \`pack_category\`, \`pack_price\`, \`pack_date\`, \`pack_image\`, \`pack_amount\`) VALUES 
+      `INSERT INTO travel_packs (pack_id, pack_title, pack_destination, pack_category, pack_price, pack_date, pack_image, pack_amount) VALUES 
       (1, 'Aventura en los Alpes', 'Suiza', 'Aventura', 1500.00, 'Julio', 'https://res.cloudinary.com/diej1zlz4/image/upload/v1727947904/Alpes_e4jby3.jpg', 10),
       (2, 'Aventura en Turquía con Globos Aerostáticos', 'Turquía', 'Aventura', 1800.00, 'Agosto', 'https://res.cloudinary.com/diej1zlz4/image/upload/v1727947037/samples/balloons.jpg', 5),
       (3, 'Naturaleza Exuberante', 'Montañas', 'Relax', 1200.00, 'Septiembre', 'https://res.cloudinary.com/diej1zlz4/image/upload/v1727947031/samples/landscapes/nature-mountains.jpg', 8),
@@ -110,38 +119,32 @@ db.connect((err) => {
       (18, 'Escapada Escocesa', 'Reino Unido', 'Cultural', 700.00, 'Abril', 'https://res.cloudinary.com/diej1zlz4/image/upload/v1728284714/escocia_gub4t0.jpg', 0),
       (19, 'Rutas Verdes de Irlanda', 'Irlanda', 'Aventura', 750.00, 'Marzo', 'https://res.cloudinary.com/diej1zlz4/image/upload/v1728284714/irlanda_gd6xsp.jpg', 5);`,
 
-      // Eliminar la tabla `orders` si ya existe
-      `DROP TABLE IF EXISTS \`orders\`;`,
-      
       // Crear la tabla `orders`
-      `CREATE TABLE \`orders\` (
-        \`order_id\` INT NOT NULL AUTO_INCREMENT,
-        \`id_users\` INT DEFAULT NULL,
-        \`address\` VARCHAR(255) DEFAULT NULL,
-        \`city\` VARCHAR(100) DEFAULT NULL,
-        \`postal_code\` VARCHAR(10) DEFAULT NULL,
-        \`payment_method\` VARCHAR(50) NOT NULL,
-        \`status\` TINYINT(1) DEFAULT NULL,
-        \`order_date\` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (\`order_id\`),
-        KEY (\`id_users\`),
-        CONSTRAINT \`orders_ibfk_1\` FOREIGN KEY (\`id_users\`) REFERENCES \`users\` (\`id_users\`)
+      `CREATE TABLE orders (
+        order_id INT NOT NULL AUTO_INCREMENT,
+        id_users INT DEFAULT NULL,
+        address VARCHAR(255) DEFAULT NULL,
+        city VARCHAR(100) DEFAULT NULL,
+        postal_code VARCHAR(10) DEFAULT NULL,
+        payment_method VARCHAR(50) NOT NULL,
+        status TINYINT(1) DEFAULT NULL,
+        order_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (order_id),
+        KEY (id_users),
+        CONSTRAINT orders_ibfk_1 FOREIGN KEY (id_users) REFERENCES users (id_users)
       ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
 
-      // Eliminar la tabla `order_items` si ya existe
-      `DROP TABLE IF EXISTS \`order_items\`;`,
-      
       // Crear la tabla `order_items`
-      `CREATE TABLE \`order_items\` (
-        \`order_item_id\` INT NOT NULL AUTO_INCREMENT,
-        \`order_id\` INT DEFAULT NULL,
-        \`pack_id\` INT DEFAULT NULL,
-        \`quantity\` INT DEFAULT NULL,
-        PRIMARY KEY (\`order_item_id\`),
-        KEY (\`order_id\`),
-        KEY (\`pack_id\`),
-        CONSTRAINT \`order_items_ibfk_1\` FOREIGN KEY (\`order_id\`) REFERENCES \`orders\` (\`order_id\`) ON DELETE CASCADE,
-        CONSTRAINT \`order_items_ibfk_2\` FOREIGN KEY (\`pack_id\`) REFERENCES \`travel_packs\` (\`pack_id\`) ON DELETE CASCADE
+      `CREATE TABLE order_items (
+        order_item_id INT NOT NULL AUTO_INCREMENT,
+        order_id INT DEFAULT NULL,
+        pack_id INT DEFAULT NULL,
+        quantity INT DEFAULT NULL,
+        PRIMARY KEY (order_item_id),
+        KEY (order_id),
+        KEY (pack_id),
+        CONSTRAINT order_items_ibfk_1 FOREIGN KEY (order_id) REFERENCES orders (order_id) ON DELETE CASCADE,
+        CONSTRAINT order_items_ibfk_2 FOREIGN KEY (pack_id) REFERENCES travel_packs (pack_id) ON DELETE CASCADE
       ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`
     ];
 
@@ -162,6 +165,7 @@ db.connect((err) => {
     executeQueries(queries);
   }
 });
+
 
 
 // Ruta de ejemplo
