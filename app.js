@@ -25,6 +25,9 @@ const corsOptions = {
 app.use(cors(corsOptions)); 
 app.use(bodyParser.json());
 
+
+///////LOCAL 
+
 // Configurar conexión a la base de datos MySQL
 // const db = mysql.createConnection({
 //   host: process.env.DB_HOST,
@@ -42,6 +45,10 @@ app.use(bodyParser.json());
 //     console.log('Connected to MySQL');
 //   }
 // });
+
+
+////railways
+
 
 // Configurar conexión a la base de datos MySQL usando MYSQL_URL
 const db = mysql.createConnection(process.env.MYSQL_URL);
@@ -161,14 +168,13 @@ db.connect((err) => {
       });
     };
 
-    // Ejecutar las consultas
     executeQueries(queries);
   }
 });
 
 
 
-// Ruta de ejemplo
+// Ruta de verifivar
 app.get('/', (req, res) => {
   res.send('Servidor corriendo correctamente');
 });
