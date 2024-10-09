@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS users;
 
 -- Crear la tabla `users`
 CREATE TABLE users (
-  id_users INT NOT NULL,  -- Eliminado AUTO_INCREMENT
+  id_users INT NOT NULL,
   user_first_name VARCHAR(45) NOT NULL,
   user_email VARCHAR(225) NOT NULL,
   user_last_name VARCHAR(45) NOT NULL,
