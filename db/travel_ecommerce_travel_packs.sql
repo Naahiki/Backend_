@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS `travel_packs`;
 
 -- Crear la tabla `travel_packs`
-CREATE TABLE `travel_packs` (
+CREATE TABLE travel_packs (
   `pack_id` int NOT NULL,
   `pack_title` varchar(225) NOT NULL,
   `pack_destination` varchar(225) NOT NULL,

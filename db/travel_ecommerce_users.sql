@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `users`;
 
 -- Crear la tabla `users`
-CREATE TABLE `users` (
+CREATE TABLE users (
   `id_users` int NOT NULL AUTO_INCREMENT,
   `user_first_name` varchar(45) NOT NULL,
   `user_email` varchar(225) NOT NULL,

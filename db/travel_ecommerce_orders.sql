@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS `orders`;
 
 -- Crear la tabla `orders`
-CREATE TABLE `orders` (
+CREATE TABLE orders (
   `order_id` int NOT NULL AUTO_INCREMENT,
   `id_users` int DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,

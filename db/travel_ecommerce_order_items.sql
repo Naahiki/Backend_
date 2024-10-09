@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS `order_items`;
 
 -- Crear la tabla `order_items`
-CREATE TABLE `order_items` (
+CREATE TABLE order_items (
   `order_item_id` int NOT NULL AUTO_INCREMENT,
   `order_id` int DEFAULT NULL,
   `pack_id` int DEFAULT NULL,
