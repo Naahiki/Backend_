@@ -38,3 +38,4 @@ INSERT INTO `travel_packs` VALUES
 (19, 'Rutas Verdes de Irlanda', 'Irlanda', 'Aventura', 750.00, 'Marzo', 'https://res.cloudinary.com/diej1zlz4/image/upload/v1728284714/irlanda_gd6xsp.jpg', 5);
 
 UNLOCK TABLES;
+

@@ -14,11 +14,3 @@ CREATE TABLE `order_items` (
   CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`pack_id`) REFERENCES `travel_packs` (`pack_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Insertar datos en la tabla `order_items`
-INSERT INTO `order_items` VALUES 
-(1, 1, 3, 3),
-(2, 1, 13, 2),
-(3, 2, 2, NULL),
-(4, 2, 1, NULL),
-(5, 2, 3, NULL),
-(6, 3, 3, NULL);

@@ -16,10 +16,4 @@ CREATE TABLE `orders` (
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Insertar datos en la tabla `orders`
-INSERT INTO `orders` VALUES 
-(1, 13, 'Artazagana5', 'Leioa', '48940', 'credit-card', 0, '2024-10-07 07:51:49'),
-(2, 13, 'Artazagana', 'Leioa', '48940', 'paypal', 0, '2024-10-07 07:52:16'),
-(3, 13, 'Artazagana', 'Leioa', '48940', 'bank-transfer', 0, '2024-10-07 07:52:42');
 
-UNLOCK TABLES;
