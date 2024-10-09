@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 // Inicializar dotenv para usar variables de entorno desde el archivo .env
 dotenv.config();
