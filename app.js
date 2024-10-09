@@ -181,11 +181,12 @@ app.post('/api/register', async (req, res) => {
     const checkEmailQuery = 'SELECT * FROM users WHERE user_email = ?';
     db.query(checkEmailQuery, [user_email], async (err, results) => {
       if (err) {
+        console.error('Error en la consulta de verificación de email:', err);
         return res.status(500).json({ error: 'Error en el servidor' });
       }
 
       if (results.length > 0) {
-        return res.status(400).json({ error: 'El email ya está registrado' }); // Responder con un error específico
+        return res.status(400).json({ error: 'El email ya está registrado' });
       }
 
       // Encriptar la contraseña
@@ -196,26 +197,28 @@ app.post('/api/register', async (req, res) => {
                                VALUES (?, ?, ?, ?, 0)`;
       db.query(insertUserQuery, [user_email, hashedPassword, user_first_name, user_last_name], (err, result) => {
         if (err) {
+          console.error('Error al registrar usuario:', err);
           return res.status(500).json({ error: 'Error al registrar usuario' });
         }
 
-        // Obtenemos el ID del usuario recién creado
-        const userId = result.insertId;
+        const userId = result.insertId; // Obtenemos el ID del usuario recién creado
 
         // Devolvemos los detalles del usuario registrado
         res.status(200).json({
-          user_id: userId,  // Enviar el ID del usuario
+          user_id: userId,
           firstName: user_first_name,
           lastName: user_last_name,
           email: user_email,
-          status: 0 // Estado inicial del usuario
+          status: 0
         });
       });
     });
   } catch (error) {
+    console.error('Error en el bloque try:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });
+
 
 
 //  obtener paquetes de viaje desde la base de datos y mostrarlos en el frontend.
