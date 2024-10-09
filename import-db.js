@@ -5,14 +5,8 @@ const dotenv = require('dotenv');
 // Cargar variables de entorno
 dotenv.config();
 
-// Crear conexión a la base de datos
-const db = mysql.createConnection({
-    host: process.env.MYSQLHOST,
-    user: process.env.MYSQLUSER,
-    password: process.env.MYSQLPASSWORD,
-    database: process.env.MYSQLDATABASE,
-    port: process.env.MYSQLPORT, // Usar el puerto proporcionado por Railway
-  });
+// Crear conexión a la base de datos usando MYSQLURL
+const db = mysql.createConnection(process.env.MYSQL_URL);
 
 db.connect((err) => {
   if (err) {
