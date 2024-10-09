@@ -61,7 +61,7 @@ db.connect((err) => {
     // Definición de las consultas
     const queries = [
       // Consultas para la tabla `users`
-      //`DROP TABLE IF EXISTS users;`,
+      `DROP TABLE IF EXISTS users;`,
       `CREATE TABLE users (
         id_users INT NOT NULL AUTO_INCREMENT,
         user_first_name VARCHAR(45) NOT NULL,
